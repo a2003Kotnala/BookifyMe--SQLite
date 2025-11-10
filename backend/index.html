@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookifyMe - Your Ultimate Reading Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --gray: #6c757d;
+            --text: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        .main-wrapper {
+            padding-top: 80px;
+            transition: transform 0.4s ease;
+        }
+        
+        .main-wrapper.sidebar-open {
+            transform: translateX(280px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Sidebar Navigation */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            z-index: 1100;
+            transition: left 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e5e7eb;
+        }
+        
+        #sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        #sidebar nav {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
+        
+        #sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+        
+        #sidebar nav a:hover {
+            color: var(--primary);
+            background-color: #f0e9ff;
+        }
+        
+        #sidebar nav a.active {
+            color: var(--primary);
+            background-color: #f0e9ff;
+            border-left-color: var(--primary);
+        }
+        
+        #sidebar nav a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1050;
+        }
+        
+        #sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .header-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .user-actions { display: flex; gap: 10px; }
+        .user-actions button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        .user-actions button:hover { transform: translateY(-2px); box-shadow: var(--shadow); background: var(--secondary); }
+        
+        .tab-content { display: none; animation: fadeIn 0.6s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 16px;
+            margin: 30px 0;
+            color: white;
+        }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 800; }
+        .hero p { font-size: 1rem; max-width: 700px; margin: 0 auto 25px; color: var(--text-light); opacity: 0.9; }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:hover { background: var(--light); transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .btn.btn-primary { background: var(--primary); color: white; }
+        .btn.btn-primary:hover { background: var(--secondary); }
+
+        /* Section Title - FIXED CSS WARNINGS */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            position: relative;
+        }
+        .section-title.eyecatchy {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            letter-spacing: -1px;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* Book Cards - FIXED CSS WARNINGS */
+        .books-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        .book-card {
+            background: transparent;
+            box-shadow: none;
+            perspective: 1000px;
+            display: flex;
+            flex-direction: column;
+        }
+        .book-cover { 
+            height: 220px; 
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+        .book-card:hover .book-cover {
+            transform: rotateY(-25deg);
+        }
+        .book-cover img {
+            border-radius: 4px 8px 8px 4px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 2%;
+            left: 2%;
+            width: 96%;
+            height: 96%;
+            background: #e0e0e0;
+            border-radius: 4px 8px 8px 4px;
+            transform: translateZ(-20px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: -1;
+        }
+        .book-info { 
+            padding: 15px 5px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .book-details {
+            min-height: 60px;
+            flex-grow: 1;
+        }
+        .book-title { 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            color: var(--dark); 
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .book-author { 
+            color: var(--gray); 
+            margin-top: 4px; 
+            font-size: 0.8rem; 
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .book-actions { display: flex; justify-content: space-around; align-items: center; margin-top: 10px; }
+        .add-to-shelf-btn, .read-now-btn {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .add-to-shelf-btn:hover, .read-now-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+        
+        /* Scrolling Book Container */
+        .scrolling-wrapper {
+            overflow: hidden;
+            position: relative;
+            padding: 10px 0;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .scroll-track {
+            display: flex;
+            animation: scroll 60s linear infinite;
+        }
+        .scrolling-wrapper:hover .scroll-track {
+            animation-play-state: paused;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .scroll-track .book-card {
+            width: 150px;
+            flex-shrink: 0;
+            margin-right: 40px;
+        }
+
+        /* My Books Tab Specifics */
+        #my-books .books-container {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 25px;
+        }
+        #my-books .book-cover { height: 180px; }
+        #my-books .book-info { padding: 10px 0; }
+        #my-books .book-title { font-size: 0.8rem; }
+        #my-books .book-author { font-size: 0.7rem; }
+        .mark-as-read-btn {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .mark-as-read-btn:hover { background: #218838; }
+        
+        /* Search Bar & Suggestions */
+        .search-container { max-width: 700px; margin: 30px auto; }
+        .search-bar { 
+            position: relative;
+            display: flex; 
+            width: 100%; 
+        }
+        .search-bar input { flex: 1; padding: 15px 25px; border: 1px solid #ddd; border-radius: 30px 0 0 30px; font-size: 16px; background: white; color: var(--dark); outline: none; transition: var(--transition); }
+        .search-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(136, 189, 242, 0.2); }
+        .search-bar button { padding: 15px 25px; background: var(--primary); color: white; border: none; border-radius: 0 30px 30px 0; cursor: pointer; font-weight: 600; transition: var(--transition); }
+        
+        /* Search Suggestions */
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            overflow: hidden;
+        }
+        .suggestion-item { padding: 12px 20px; cursor: pointer; transition: var(--transition); border-bottom: 1px solid #eee; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover { background-color: #f0e9ff; color: var(--primary); }
+
+        /* Search Filters */
+        .search-options {
+            display: flex;
+            justify-content: flex-start;
+            gap: 25px;
+            max-width: 700px;
+            margin: 15px auto 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-options .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .search-options label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        .search-options select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            font-weight: 500;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236c757d'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6); z-index: 2000;
+            align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        }
+        .modal-content { background: white; color: var(--dark); padding: 35px; border-radius: 16px; max-width: 450px; width: 90%; box-shadow: var(--shadow-lg); animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .modal-header h2 { font-size: 1.8rem; font-weight: 700; }
+        .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--gray); transition: var(--transition); }
+        .close-modal:hover { color: var(--dark); transform: rotate(90deg); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; transition: var(--transition); background: var(--light); color: var(--dark); }
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(136, 189, 242, 0.2); outline: none; }
+        
+        .auth-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 25px; }
+        .auth-tab { flex: 1; text-align: center; padding: 12px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: var(--transition); color: var(--gray); }
+        .auth-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        
+        /* Profile Dashboard */
+        .profile-header { background: white; padding: 30px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; }
+        .profile-info h3 { font-size: 1.8rem; font-weight: 700; }
+        .profile-info p { color: var(--gray); }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; }
+        .stat-card { background: white; padding: 25px; border-radius: 12px; text-align: center; box-shadow: var(--shadow); }
+        .stat-card .stat-icon { font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+        .stat-card .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--dark); }
+        .stat-card .stat-label { color: var(--gray); font-size: 1rem; }
+        
+        /* Other styles */
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 30px 0; }
+        .category-card { background: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); cursor: pointer; }
+        .category-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-bottom: 4px solid var(--primary); }
+        .category-icon { font-size: 40px; color: var(--primary); margin-bottom: 15px; transition: var(--transition); }
+        .category-card:hover .category-icon { transform: scale(1.2); color: var(--secondary); }
+        .category-card h3 { font-size: 1.2rem; font-weight: 600; }
+        .shelf-section { background: white; padding: 30px; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 30px; }
+        .shelf-title { font-size: 24px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; color: var(--dark); display: flex; align-items: center; gap: 10px; font-weight: 600; }
+        .empty-state { text-align: center; padding: 40px; color: var(--gray); background: #fafafa; border-radius: 8px; }
+        .empty-state i { font-size: 40px; margin-bottom: 15px; color: var(--primary); }
+        .community-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin: 30px 0; }
+        .stat { background: white; padding: 25px; border-radius: 12px; text-align: center; box-shadow: var(--shadow); }
+        .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .stat-label { color: var(--gray); font-size: 1rem; }
+        .groups-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0; }
+        .group-card { background: white; padding: 20px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 20px; transition: var(--transition); }
+        .group-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .group-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; flex-shrink: 0; }
+        .group-info h3 { margin-bottom: 5px; font-weight: 600; }
+        .group-info p { color: var(--gray); font-size: 0.9rem; }
+        footer { background: var(--dark); color: white; padding: 60px 0 30px; margin-top: 60px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 20px; margin-bottom: 20px; font-weight: 600; }
+        .footer-section a { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 10px; transition: var(--transition); }
+        .footer-section a:hover { color: white; padding-left: 5px; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--gray); color: var(--text-muted); }
+        .loading { text-align: center; padding: 40px; font-size: 20px; color: var(--gray); }
+        .loading i { margin-right: 10px; color: var(--primary); }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-success {
+            background: #00b894;
+        }
+
+        .notification-error {
+            background: #ff6b6b;
+        }
+
+        .notification-info {
+            background: #0984e3;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-book-open-reader sidebar-logo"></i>
+            <span class="sidebar-logo">BookifyMe</span>
+        </div>
+        <nav>
+            <a href="#home" class="nav-link active" data-tab="home"><i class="fas fa-home"></i> Home</a>
+            <a href="#browse" class="nav-link" data-tab="browse"><i class="fas fa-search"></i> Browse</a>
+            <a href="#categories" class="nav-link" data-tab="categories"><i class="fas fa-th-large"></i> Categories</a>
+            <a href="#my-books" class="nav-link" data-tab="my-books" id="my-books-link" style="display: none;"><i class="fas fa-book-bookmark"></i> My Books</a>
+            <a href="#community" class="nav-link" data-tab="community"><i class="fas fa-users"></i> Community</a>
+            <a href="#profile" class="nav-link" data-tab="profile" id="profile-link" style="display: none;"><i class="fas fa-user-circle"></i> Profile</a>
+        </nav>
+    </div>
+    <div id="sidebar-overlay"></div>
+
+    <header>
+        <div class="container header-content">
+            <div class="header-left">
+                <i class="fas fa-bars" id="menu-toggle"></i>
+                <a href="#home" class="header-logo">BookifyMe</a>
+            </div>
+            <div class="user-actions">
+                <button id="auth-btn">Login / Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main class="container">
+            <!-- Home Tab -->
+            <div id="home" class="tab-content active">
+                <section class="hero">
+                    <div class="hero-content">
+                        <h1>Discover Your Next Favorite Book</h1>
+                        <p>BookifyMe's intelligent engine finds perfect books tailored to your unique reading tastes.</p>
+                        <a href="#browse" class="btn" id="explore-now-btn">Explore Now</a>
+                    </div>
+                </section>
+                
+                <!-- Currently Reading Section for Logged-in Users -->
+                <div id="currently-reading-section" style="display: none;">
+                    <h2 class="section-title eyecatchy">Continue Reading</h2>
+                    <div class="books-container" id="currently-reading-container">
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <p>You're not currently reading any books. Start reading to see them here!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recommended Books Section for Logged-in Users -->
+                <div id="recommended-books-section" style="display: none;">
+                    <h2 class="section-title eyecatchy">Recommended For You</h2>
+                    <div class="books-container" id="recommended-books-container">
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <p>We are still learning your preferences. Start reading and rating books to get recommendations!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title eyecatchy">Trending Books</h2>
+                <div class="scrolling-wrapper">
+                    <div id="trending-books-container"></div>
+                </div>
+                <h2 class="section-title eyecatchy">New Releases</h2>
+                <div class="scrolling-wrapper">
+                    <div id="new-releases-container"></div>
+                </div>
+            </div>
+
+            <!-- Browse Tab -->
+            <div id="browse" class="tab-content">
+                <h2 class="section-title">Find Your Next Read</h2>
+                <div class="search-container">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search for books, authors, or genres..." autocomplete="off">
+                        <button id="search-button"><i class="fas fa-search"></i></button>
+                        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+                    </div>
+                </div>
+                
+                <div class="search-options">
+                    <div class="filter-group">
+                        <label for="sort-by">Sort By</label>
+                        <select id="sort-by">
+                            <option value="relevance">Relevance</option>
+                            <option value="newest">Newest</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="print-type">Print Type</label>
+                        <select id="print-type">
+                            <option value="all">All</option>
+                            <option value="books">Books</option>
+                            <option value="magazines">Magazines</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="language">Language</label>
+                        <select id="language">
+                            <option value="any">Any</option>
+                            <option value="en">English</option>
+                            <option value="fr">French</option>
+                            <option value="es">Spanish</option>
+                            <option value="de">German</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="books-container" id="search-results-container"></div>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categories" class="tab-content">
+                <h2 class="section-title">Explore by Category</h2>
+                <div class="categories-grid"></div>
+            </div>
+
+            <!-- My Books Tab -->
+            <div id="my-books" class="tab-content">
+                <h2 class="section-title">My Personal Bookshelf</h2>
+                <div class="shelf-section">
+                    <h3 class="shelf-title"><i class="fas fa-book-open"></i> Currently Reading</h3>
+                    <div class="books-container" id="shelf-reading"><div class="empty-state"><p>No books here yet.</p></div></div>
+                </div>
+                <div class="shelf-section">
+                    <h3 class="shelf-title"><i class="fas fa-history"></i> Reading History</h3>
+                    <div class="books-container" id="shelf-history"><div class="empty-state"><p>You haven't finished any books yet.</p></div></div>
+                </div>
+                 <div class="shelf-section">
+                    <h3 class="shelf-title"><i class="fas fa-bookmark"></i> Want to Read</h3>
+                    <div class="books-container" id="shelf-want-to-read"><div class="empty-state"><p>Your reading list is empty.</p></div></div>
+                </div>
+            </div>
+
+            <!-- Community Tab -->
+            <div id="community" class="tab-content">
+                <h2 class="section-title">Join the BookifyMe Community</h2>
+                <div class="community-stats">
+                    <div class="stat"><div class="stat-value">12,589</div><div class="stat-label">Active Readers</div></div>
+                    <div class="stat"><div class="stat-value">4,327</div><div class="stat-label">Book Reviews</div></div>
+                    <div class="stat"><div class="stat-value">1,204</div><div class="stat-label">Reading Groups</div></div>
+                </div>
+                <h2 class="section-title">Popular Reading Groups</h2>
+                <div class="groups-container"></div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile" class="tab-content">
+                <h2 class="section-title">My Reading Dashboard</h2>
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profile-avatar"></div>
+                    <div class="profile-info">
+                        <h3 id="profile-name"></h3>
+                        <p id="profile-email"></p>
+                    </div>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-book"></i></div>
+                        <div class="stat-value" id="stats-books-read">0</div>
+                        <div class="stat-label">Books Read</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                        <div class="stat-value" id="stats-pages-read">0</div>
+                        <div class="stat-label">Pages Read</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-th-large"></i></div>
+                        <div class="stat-value" id="stats-genres">0</div>
+                        <div class="stat-label">Genres Explored</div>
+                    </div>
+                     <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-value" id="stats-groups">0</div>
+                        <div class="stat-label">Groups Joined</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section"><h3>About BookifyMe</h3><p>Discover your next favorite book with intelligent recommendations.</p></div>
+                    <div class="footer-section"><h3>Quick Links</h3><a href="#home">Home</a><a href="#browse">Browse</a><a href="#community">Community</a></div>
+                    <div class="footer-section"><h3>Help & Support</h3><a href="#">FAQ</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a></div>
+                </div>
+                <div class="footer-bottom"><p>&copy; 2025 BookifyMe. All rights reserved.</p></div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="auth-modal-title">Sign In</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-form="login">Sign In</div>
+                <div class="auth-tab" data-form="register">Register</div>
+            </div>
+            <form id="login-form" class="auth-form active">
+                <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" required></div>
+                <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" required></div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+            </form>
+            <form id="register-form" class="auth-form">
+                <div class="form-group"><label for="register-name">Name</label><input type="text" id="register-name" required></div>
+                <div class="form-group"><label for="register-email">Email</label><input type="email" id="register-email" required></div>
+                <div class="form-group"><label for="register-password">Password</label><input type="password" id="register-password" required></div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+            </form>
+        </div>
+    </div>
+    <div id="shelf-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Add to Shelf</h2><button class="close-modal">&times;</button></div><div id="shelf-options" class="flex flex-col gap-4"></div></div></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- BACKEND CONFIGURATION ---
+            const BACKEND_BASE_URL = 'http://localhost:5000/api';
+            const GOOGLE_BOOKS_API_KEY = 'AIzaSyDfWNJLVlecyOYbfDtce7BQwmbO0zg9QBc';
+            const BASE_URL = 'https://www.googleapis.com/books/v1/volumes';
+
+            // --- DOM ELEMENTS ---
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const menuToggle = document.getElementById('menu-toggle');
+            const mainWrapper = document.querySelector('.main-wrapper');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const myBooksLink = document.getElementById('my-books-link');
+            const profileLink = document.getElementById('profile-link');
+            const modals = document.querySelectorAll('.modal');
+            const closeModalButtons = document.querySelectorAll('.close-modal');
+            const searchInput = document.getElementById('search-input');
+            const searchSuggestions = document.getElementById('search-suggestions');
+            const searchOptions = document.querySelector('.search-options');
+            const currentlyReadingSection = document.getElementById('currently-reading-section');
+            const recommendedBooksSection = document.getElementById('recommended-books-section');
+            
+            // --- APP STATE ---
+            let appState = {
+                currentUser: null,
+                userShelves: { reading: [], wantToRead: [], history: [] },
+                joinedGroups: new Set(),
+                searchTimeout: null,
+                currentSearchQuery: '',
+                authToken: localStorage.getItem('authToken'),
+                backendAvailable: true // Track backend status
+            };
+
+            // --- BACKEND API FUNCTIONS WITH FALLBACKS ---
+            async function backendRequest(endpoint, options = {}) {
+                const url = `${BACKEND_BASE_URL}${endpoint}`;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    ...options
+                };
+                
+                if (appState.authToken) {
+                    config.headers['Authorization'] = `Bearer ${appState.authToken}`;
+                }
+                
+                try {
+                    const response = await fetch(url, config);
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred' }));
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    appState.backendAvailable = true;
+                    return data;
+                } catch (error) {
+                    console.error('Backend request failed:', error);
+                    appState.backendAvailable = false;
+                    throw error;
+                }
+            }
+
+            async function backendLogin(credentials) {
+                return backendRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify(credentials)
+                });
+            }
+
+            async function backendRegister(userData) {
+                return backendRequest('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(userData)
+                });
+            }
+
+            async function getBackendBookshelf() {
+                try {
+                    const data = await backendRequest('/bookshelf');
+                    console.log('Backend bookshelf data:', data);
+                    return data.data.bookshelves || { reading: [], wantToRead: [], finished: [] };
+                } catch (error) {
+                    console.error('Failed to get bookshelf from backend, using local storage:', error);
+                    return null; // Return null to indicate backend failure
+                }
+            }
+
+            async function addToBackendShelf(book, shelfType) {
+                try {
+                    const bookData = book.book || book;
+                    const volumeInfo = bookData.volumeInfo || bookData;
+                    const bookId = bookData.id || bookData.google_books_id || volumeInfo.id;
+                    
+                    if (!bookId) {
+                        console.error('Book ID not found in:', book);
+                        throw new Error('Book ID not found');
+                    }
+
+                    // Prepare book data for backend
+                    const bookPayload = {
+                        google_books_id: bookId,
+                        title: volumeInfo.title || 'Unknown Title',
+                        authors: volumeInfo.authors || ['Unknown Author'],
+                        thumbnail: volumeInfo.thumbnail || volumeInfo.imageLinks?.thumbnail,
+                        page_count: volumeInfo.pageCount || 0
+                    };
+
+                    const response = await backendRequest('/bookshelf/add', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            book_id: bookId,
+                            shelf_type: shelfType,
+                            book_data: bookPayload
+                        })
+                    });
+                    
+                    console.log('Book added to backend shelf:', response);
+                    return response;
+                } catch (error) {
+                    console.error('Error adding to backend shelf:', error);
+                    throw error;
+                }
+            }
+
+            async function removeFromBackendShelf(bookId, shelfType) {
+                try {
+                    const response = await backendRequest('/bookshelf/remove', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            book_id: bookId,
+                            shelf_type: shelfType
+                        })
+                    });
+                    
+                    console.log('Book removed from backend shelf:', response);
+                    return response;
+                } catch (error) {
+                    console.error('Error removing from backend shelf:', error);
+                    throw error;
+                }
+            }
+
+            // IMPROVED: Move book between shelves in backend with better error handling
+            async function moveBookInBackend(book, fromShelf, toShelf) {
+                try {
+                    const bookData = book.book || book;
+                    const volumeInfo = bookData.volumeInfo || bookData;
+                    const bookId = bookData.id || bookData.google_books_id || volumeInfo.id;
+                    
+                    if (!bookId) {
+                        throw new Error('Book ID not found');
+                    }
+
+                    // Try to remove from old shelf (ignore if it fails - book might not exist there)
+                    try {
+                        await removeFromBackendShelf(bookId, fromShelf);
+                        console.log(`Removed book from ${fromShelf} shelf in backend`);
+                    } catch (removeError) {
+                        console.warn(`Could not remove book from ${fromShelf} shelf:`, removeError.message);
+                        // Continue anyway - the book might not exist in that shelf
+                    }
+
+                    // Add to new shelf
+                    await addToBackendShelf(book, toShelf);
+                    console.log(`Added book to ${toShelf} shelf in backend`);
+                    
+                    console.log(`Book moved from ${fromShelf} to ${toShelf} in backend`);
+                    return true;
+                } catch (error) {
+                    console.error('Error moving book in backend:', error);
+                    throw error;
+                }
+            }
+
+            async function getBackendStats() {
+                try {
+                    const data = await backendRequest('/bookshelf/stats');
+                    return data.data.stats || {};
+                } catch (error) {
+                    console.error('Failed to get stats from backend:', error);
+                    return {};
+                }
+            }
+
+            // --- UI UTILITIES ---
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            // --- BOOKS API ---
+            async function fetchBooks(query, params = {}, limit = 10) {
+                try {
+                    const urlParams = new URLSearchParams({
+                        q: query,
+                        maxResults: limit,
+                        key: GOOGLE_BOOKS_API_KEY
+                    });
+                    
+                    if (params.orderBy && params.orderBy !== 'relevance') urlParams.append('orderBy', params.orderBy);
+                    if (params.printType && params.printType !== 'all') urlParams.append('printType', params.printType);
+                    if (params.langRestrict && params.langRestrict !== 'any') urlParams.append('langRestrict', params.langRestrict);
+
+                    const response = await fetch(`${BASE_URL}?${urlParams.toString()}`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    return data.items || [];
+                } catch (error) {
+                    console.error('Error fetching books:', error);
+                    showNotification('Failed to fetch books. Please check your internet connection.', 'error');
+                    return [];
+                }
+            }
+
+            // --- UI RENDERING ---
+            function createBookCard(book, cardType = 'standard') {
+                // Ensure we have the proper book data structure
+                const bookData = book.book || book;
+                const volumeInfo = bookData.volumeInfo || bookData;
+                const title = volumeInfo.title || 'No Title';
+                
+                let author = 'Unknown Author';
+                if (volumeInfo.authors) {
+                    author = Array.isArray(volumeInfo.authors) 
+                        ? (volumeInfo.authors.length > 2 ? `${volumeInfo.authors.slice(0, 2).join(', ')} et al.` : volumeInfo.authors.join(', '))
+                        : volumeInfo.authors;
+                }
+
+                let imageUrl = volumeInfo.thumbnail || volumeInfo.imageLinks?.thumbnail || volumeInfo.imageLinks?.smallThumbnail || `https://placehold.co/220x300/6a11cb/ffffff?text=${encodeURIComponent(title.charAt(0))}`;
+                if (imageUrl.startsWith('http://')) {
+                    imageUrl = imageUrl.replace('http://', 'https://');
+                }
+                if(imageUrl.includes('zoom=')) {
+                    imageUrl = imageUrl.replace(/zoom=[0-9]/, 'zoom=0');
+                }
+
+                const readLink = bookData.accessInfo?.webReaderLink || book.accessInfo?.webReaderLink || volumeInfo.preview_link;
+                const card = document.createElement('div');
+                card.className = (cardType === 'small' || cardType === 'reading') ? 'book-card small-book-card' : 'book-card';
+                
+                let actionsHtml = `<button class="add-to-shelf-btn" title="Add to shelf"><i class="fas fa-plus"></i></button>`;
+                if (cardType === 'reading') {
+                    actionsHtml = `<button class="mark-as-read-btn" title="Mark as Read"><i class="fas fa-check"></i> Mark as Read</button>`;
+                }
+                if (readLink) {
+                    actionsHtml += `<a href="${readLink}" target="_blank" class="read-now-btn" title="Read Now"><i class="fas fa-book-reader"></i></a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${imageUrl}" alt="${title}" onerror="this.src='https://placehold.co/220x300/e9ecef/6c757d?text=No+Image'">
+                    </div>
+                    <div class="book-info">
+                        <div class="book-details">
+                           <h3 class="book-title" title="${title}">${title}</h3>
+                           <p class="book-author">${author}</p>
+                        </div>
+                        <div class="book-actions">${actionsHtml}</div>
+                    </div>
+                `;
+                
+                card.querySelector('.add-to-shelf-btn')?.addEventListener('click', e => { 
+                    e.stopPropagation(); 
+                    if (!appState.currentUser) { 
+                        openModal('auth'); 
+                        return; 
+                    } 
+                    openShelfModal(book); 
+                });
+                
+                card.querySelector('.read-now-btn')?.addEventListener('click', e => { 
+                    if (!appState.currentUser) { 
+                        e.preventDefault(); 
+                        openModal('auth'); 
+                        return; 
+                    } 
+                    addBookToShelf(book, 'reading'); 
+                });
+                
+                const markAsReadBtn = card.querySelector('.mark-as-read-btn');
+                if (markAsReadBtn) {
+                    markAsReadBtn.addEventListener('click', async e => { 
+                        e.stopPropagation(); 
+                        
+                        // Add immediate visual feedback
+                        const button = e.target.closest('.mark-as-read-btn');
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Marking...';
+                        button.disabled = true;
+                        
+                        try {
+                            await markBookAsRead(book);
+                            // Success - button will be removed as card gets re-rendered
+                        } catch (error) {
+                            // Reset button on error
+                            button.innerHTML = originalText;
+                            button.disabled = false;
+                        }
+                    });
+                }
+                
+                return card;
+            }
+
+            function renderBooks(containerId, books, cardType = 'standard') {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = '';
+                if (!books || books.length === 0) {
+                    const emptyStateMessage = containerId.includes('search') 
+                        ? 'No books found for your query.' 
+                        : 'No books here yet.';
+                    container.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">
+                                            <p>${emptyStateMessage}</p>
+                                           </div>`;
+                    return;
+                }
+
+                if (container.parentElement.classList.contains('scrolling-wrapper')) {
+                    container.classList.remove('books-container');
+                    container.classList.add('scroll-track');
+                    const allCards = [...books, ...books].map(book => createBookCard(book, cardType));
+                    allCards.forEach(card => container.appendChild(card));
+                } else {
+                    container.classList.add('books-container');
+                    container.classList.remove('scroll-track');
+                    books.forEach(book => container.appendChild(createBookCard(book, cardType)));
+                }
+            }
+
+            // --- SIDEBAR & NAVIGATION ---
+            function toggleSidebar() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+                mainWrapper.classList.toggle('sidebar-open');
+            }
+            menuToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            function showTab(tabName) {
+                navLinks.forEach(link => link.classList.toggle('active', link.dataset.tab === tabName));
+                tabContents.forEach(tab => tab.classList.toggle('active', tab.id === tabName));
+                window.scrollTo(0, 0);
+
+                if (tabName === 'my-books') {
+                    updateBookshelves(); 
+                }
+                
+                if (sidebar.classList.contains('open')) toggleSidebar();
+            }
+
+            function switchTab(tabName) {
+                const state = { tab: tabName };
+                const url = `#${tabName}`;
+                history.pushState(state, '', url);
+                showTab(tabName);
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchTab(link.dataset.tab);
+                });
+            });
+
+            document.getElementById('explore-now-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('browse');
+            });
+            document.querySelector('.header-logo').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('home');
+            });
+
+            window.addEventListener('popstate', (e) => {
+                const tab = e.state?.tab || 'home';
+                showTab(tab);
+            });
+
+            // --- MODALS ---
+            function openModal(modalId) { 
+                document.getElementById(`${modalId}-modal`).style.display = 'flex'; 
+            }
+            
+            function closeModals() { 
+                modals.forEach(modal => modal.style.display = 'none'); 
+            }
+            
+            closeModalButtons.forEach(btn => btn.addEventListener('click', closeModals));
+            document.addEventListener('keydown', (e) => { 
+                if (e.key === 'Escape') closeModals(); 
+            });
+
+            // --- AUTHENTICATION ---
+            function setupAuthModal() {
+                const authTabs = document.querySelectorAll('.auth-tab');
+                const authForms = document.querySelectorAll('.auth-form');
+                const authModalTitle = document.getElementById('auth-modal-title');
+                authTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        authTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        const formToShow = tab.dataset.form;
+                        authModalTitle.textContent = formToShow === 'login' ? 'Sign In' : 'Create Account';
+                        authForms.forEach(form => form.classList.toggle('active', form.id === `${formToShow}-form`));
+                    });
+                });
+            }
+
+            function updateUIForAuth() {
+                const actionsContainer = document.querySelector('.user-actions');
+                if (appState.currentUser) {
+                    actionsContainer.innerHTML = `<div id="user-profile" class="flex items-center gap-3"><a href="#profile" id="profile-name-link" class="font-semibold text-gray-700 hover:text-primary transition">Hi, ${appState.currentUser.name}</a><button id="logout-btn" class="bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-full font-semibold transition">Logout</button></div>`;
+                    actionsContainer.querySelector('#logout-btn').addEventListener('click', handleLogout);
+                    actionsContainer.querySelector('#profile-name-link').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        switchTab('profile');
+                    });
+                    myBooksLink.style.display = 'flex';
+                    profileLink.style.display = 'flex';
+                    currentlyReadingSection.style.display = 'block';
+                    recommendedBooksSection.style.display = 'block';
+                    updateCurrentlyReadingSection();
+                    loadRecommendedBooks();
+                } else {
+                    actionsContainer.innerHTML = `<button id="auth-btn">Login / Sign Up</button>`;
+                    actionsContainer.querySelector('#auth-btn').addEventListener('click', () => openModal('auth'));
+                    myBooksLink.style.display = 'none';
+                    profileLink.style.display = 'none';
+                    currentlyReadingSection.style.display = 'none';
+                    recommendedBooksSection.style.display = 'none';
+                }
+                updateProfileDashboard();
+            }
+            
+            async function handleLogout() {
+                // Save joined groups before logout
+                if (appState.currentUser) {
+                    localStorage.setItem(`bookifyme_joinedGroups_${appState.currentUser.email}`, JSON.stringify([...appState.joinedGroups]));
+                }
+                
+                appState.currentUser = null;
+                appState.userShelves = { reading: [], wantToRead: [], history: [] };
+                appState.joinedGroups.clear();
+                appState.authToken = null;
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                updateUIForAuth();
+                switchTab('home');
+                showNotification('You have been logged out.', 'info');
+            }
+
+            async function handleLogin(email, password) {
+                try {
+                    const response = await backendLogin({ email, password });
+                    appState.currentUser = response.data.user;
+                    appState.authToken = response.data.token;
+                    localStorage.setItem('authToken', appState.authToken);
+                    localStorage.setItem('currentUser', JSON.stringify(appState.currentUser));
+                    
+                    // Load joined groups from localStorage
+                    const storedGroups = localStorage.getItem(`bookifyme_joinedGroups_${appState.currentUser.email}`);
+                    if (storedGroups) {
+                        appState.joinedGroups = new Set(JSON.parse(storedGroups));
+                    }
+                    
+                    await loadUserData();
+                    updateUIForAuth();
+                    closeModals();
+                    showNotification('Welcome back! Successfully logged in.', 'success');
+                } catch (error) {
+                    showNotification('Login failed: ' + error.message, 'error');
+                }
+            }
+
+            async function handleRegister(name, email, password) {
+                if (password.length < 6) {
+                    showNotification('Password must be at least 6 characters long', 'error');
+                    return;
+                }
+                try {
+                    const response = await backendRegister({ name, email, password });
+                    appState.currentUser = response.data.user;
+                    appState.authToken = response.data.token;
+                    localStorage.setItem('authToken', appState.authToken);
+                    localStorage.setItem('currentUser', JSON.stringify(appState.currentUser));
+                    
+                    // Initialize empty groups for new user
+                    appState.joinedGroups = new Set();
+                    localStorage.setItem(`bookifyme_joinedGroups_${appState.currentUser.email}`, JSON.stringify([]));
+                    
+                    initializeUserData();
+                    updateUIForAuth();
+                    closeModals();
+                    showNotification('Account created successfully! Welcome to BookifyMe.', 'success');
+                } catch (error) {
+                    showNotification('Registration failed: ' + error.message, 'error');
+                }
+            }
+
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleLogin(
+                    document.getElementById('login-email').value,
+                    document.getElementById('login-password').value
+                );
+            });
+
+            document.getElementById('register-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleRegister(
+                    document.getElementById('register-name').value,
+                    document.getElementById('register-email').value,
+                    document.getElementById('register-password').value
+                );
+            });
+
+            // --- BOOKSHELF & PROFILE ---
+            function openShelfModal(book) {
+                const shelfOptions = document.getElementById('shelf-options');
+                shelfOptions.innerHTML = `
+                    <button class="btn btn-primary add-to-shelf-option" data-shelf="reading">Currently Reading</button>
+                    <button class="btn btn-primary add-to-shelf-option" data-shelf="wantToRead">Want to Read</button>
+                    <button class="btn btn-primary add-to-shelf-option" data-shelf="finished">Add to History</button>
+                `;
+                shelfOptions.querySelectorAll('.add-to-shelf-option').forEach(btn => {
+                    btn.addEventListener('click', () => { 
+                        addBookToShelf(book, btn.dataset.shelf); 
+                        closeModals(); 
+                    });
+                });
+                openModal('shelf');
+            }
+
+            // Helper function to extract book ID consistently
+            function getBookId(book) {
+                const bookData = book.book || book;
+                const volumeInfo = bookData.volumeInfo || bookData;
+                return bookData.id || bookData.google_books_id || volumeInfo.id;
+            }
+
+            async function addBookToShelf(book, shelf) {
+                const bookDataForApi = book.book || book;
+                const bookId = getBookId(book);
+                const originalShelves = JSON.parse(JSON.stringify(appState.userShelves));
+
+                try {
+                    const backendShelf = shelf === 'history' ? 'finished' : shelf;
+                    
+                    // Remove from all shelves first to avoid duplicates
+                    Object.keys(appState.userShelves).forEach(shelfKey => {
+                        appState.userShelves[shelfKey] = appState.userShelves[shelfKey].filter(
+                            shelfBook => getBookId(shelfBook) !== bookId
+                        );
+                    });
+
+                    const bookInfo = book.volumeInfo || book.book || book;
+                    const newShelfEntry = {
+                        book: {
+                            ...bookInfo,
+                            google_books_id: bookId,
+                            thumbnail: bookInfo.thumbnail || bookInfo.imageLinks?.thumbnail,
+                            authors: Array.isArray(bookInfo.authors) ? bookInfo.authors : [bookInfo.authors].filter(Boolean)
+                        },
+                        shelf_type: backendShelf,
+                        added_at: new Date().toISOString()
+                    };
+                    
+                    const localShelfKey = backendShelf === 'finished' ? 'history' : backendShelf;
+                    appState.userShelves[localShelfKey]?.unshift(newShelfEntry);
+                    
+                    // Save to localStorage immediately
+                    saveUserShelvesToStorage();
+                    
+                    if (document.getElementById('my-books').classList.contains('active')) {
+                        updateBookshelves();
+                    }
+                    
+                    // Update currently reading section on home page
+                    updateCurrentlyReadingSection();
+                    
+                    // Try to update backend, but don't fail if backend is unavailable
+                    try {
+                        await addToBackendShelf(bookDataForApi, backendShelf);
+                    } catch (backendError) {
+                        console.warn('Backend update failed, but local state was saved:', backendError);
+                        // Don't show error to user for backend failures in add
+                    }
+                    
+                    const shelfNames = {
+                        'reading': 'Currently Reading', 'wantToRead': 'Want to Read',
+                        'history': 'Reading History', 'finished': 'Reading History'
+                    };
+                    showNotification(`Book moved to ${shelfNames[shelf]}!`, 'success');
+
+                } catch (error) {
+                    appState.userShelves = originalShelves;
+                    if (document.getElementById('my-books').classList.contains('active')) {
+                        updateBookshelves();
+                    }
+                    showNotification('Failed to move book: ' + error.message, 'error');
+                }
+            }
+
+            // COMPLETELY FIXED: markBookAsRead function with robust backend handling
+            async function markBookAsRead(book) {
+                try {
+                    console.log('Marking book as read:', book);
+                    
+                    const bookId = getBookId(book);
+                    
+                    console.log('Book ID:', bookId);
+                    
+                    if (!bookId) {
+                        throw new Error('Book ID not found');
+                    }
+
+                    // Save original state for potential rollback
+                    const originalShelves = JSON.parse(JSON.stringify(appState.userShelves));
+
+                    // FIRST: Update local state immediately for better UX
+                    // Remove from reading shelf in local state
+                    const originalReadingLength = appState.userShelves.reading.length;
+                    appState.userShelves.reading = appState.userShelves.reading.filter(
+                        shelfBook => getBookId(shelfBook) !== bookId
+                    );
+                    
+                    console.log(`Removed from reading. Before: ${originalReadingLength}, After: ${appState.userShelves.reading.length}`);
+
+                    // Add to history (avoid duplicates) in local state
+                    const isAlreadyInHistory = appState.userShelves.history.some(
+                        shelfBook => getBookId(shelfBook) === bookId
+                    );
+                    
+                    if (!isAlreadyInHistory) {
+                        const bookData = book.book || book;
+                        const volumeInfo = bookData.volumeInfo || bookData;
+                        const historyEntry = {
+                            book: {
+                                ...volumeInfo,
+                                google_books_id: bookId,
+                                id: bookId,
+                                thumbnail: volumeInfo.thumbnail || volumeInfo.imageLinks?.thumbnail,
+                                authors: Array.isArray(volumeInfo.authors) ? volumeInfo.authors : [volumeInfo.authors].filter(Boolean)
+                            },
+                            shelf_type: 'finished',
+                            added_at: new Date().toISOString()
+                        };
+                        appState.userShelves.history.unshift(historyEntry);
+                        console.log('Added to history. History length:', appState.userShelves.history.length);
+                    }
+
+                    // Save to localStorage immediately
+                    saveUserShelvesToStorage();
+
+                    // Update UI immediately for better UX
+                    updateBookshelves();
+                    updateCurrentlyReadingSection();
+                    
+                    // Show immediate feedback
+                    showNotification('Book marked as read!', 'success');
+
+                    // THEN: Try to update backend in the background
+                    try {
+                        await moveBookInBackend(book, 'reading', 'finished');
+                        console.log('Backend successfully updated');
+                    } catch (backendError) {
+                        console.warn('Backend update failed, but local state was saved:', backendError);
+                        // Don't show error to user for backend failures - local state is preserved
+                        // The data will sync when backend comes back online
+                    }
+
+                } catch (error) {
+                    console.error('Error marking book as read:', error);
+                    showNotification('Failed to mark book as read: ' + error.message, 'error');
+                    throw error;
+                }
+            }
+
+            // Save user shelves to localStorage
+            function saveUserShelvesToStorage() {
+                if (appState.currentUser) {
+                    localStorage.setItem(`bookifyme_userShelves_${appState.currentUser.email}`, JSON.stringify(appState.userShelves));
+                    console.log('User shelves saved to localStorage');
+                }
+            }
+
+            // Load user shelves from localStorage
+            function loadUserShelvesFromStorage() {
+                if (appState.currentUser) {
+                    const storedShelves = localStorage.getItem(`bookifyme_userShelves_${appState.currentUser.email}`);
+                    if (storedShelves) {
+                        appState.userShelves = JSON.parse(storedShelves);
+                        console.log('User shelves loaded from localStorage:', appState.userShelves);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // IMPROVED: loadUserData with better backend fallback
+            async function loadUserData() {
+                if (!appState.currentUser) return;
+                
+                try {
+                    // First try to load from backend to get the source of truth
+                    const bookshelfData = await getBackendBookshelf();
+                    
+                    if (bookshelfData) {
+                        // Backend returned valid data - use it as source of truth
+                        appState.userShelves = {
+                            reading: bookshelfData.reading || [],
+                            wantToRead: bookshelfData.wantToRead || [],
+                            history: bookshelfData.finished || []
+                        };
+                        console.log('Using backend data as source of truth');
+                    } else {
+                        // Backend failed or returned null - use localStorage
+                        const hasLocalData = loadUserShelvesFromStorage();
+                        if (!hasLocalData) {
+                            // If no local data either, initialize empty
+                            appState.userShelves = { reading: [], wantToRead: [], history: [] };
+                        }
+                        console.log('Using localStorage data (backend unavailable)');
+                    }
+                    
+                    // Save the final state to localStorage
+                    saveUserShelvesToStorage();
+                    
+                    // Update UI
+                    if (document.getElementById('my-books').classList.contains('active')) {
+                        updateBookshelves();
+                    }
+                    updateCurrentlyReadingSection();
+                    updateProfileDashboard();
+                    
+                    console.log('Final user shelves state:', appState.userShelves);
+                } catch (error) {
+                    console.error('Failed to load user data:', error);
+                    // If everything fails, fall back to localStorage
+                    if (!loadUserShelvesFromStorage()) {
+                        appState.userShelves = { reading: [], wantToRead: [], history: [] };
+                    }
+                }
+            }
+
+            function initializeUserData() {
+                appState.userShelves = { reading: [], wantToRead: [], history: [] };
+                saveUserShelvesToStorage();
+                updateBookshelves();
+                updateCurrentlyReadingSection();
+            }
+
+            function updateBookshelves() {
+                try {
+                    console.log('Updating bookshelves - Reading:', appState.userShelves.reading?.length, 'History:', appState.userShelves.history?.length);
+                    
+                    // Clear containers first
+                    const readingContainer = document.getElementById('shelf-reading');
+                    const historyContainer = document.getElementById('shelf-history');
+                    const wantToReadContainer = document.getElementById('shelf-want-to-read');
+                    
+                    if (readingContainer) readingContainer.innerHTML = '';
+                    if (historyContainer) historyContainer.innerHTML = '';
+                    if (wantToReadContainer) wantToReadContainer.innerHTML = '';
+                    
+                    // Render each shelf
+                    if (appState.userShelves.reading?.length > 0) {
+                        appState.userShelves.reading.forEach(book => {
+                            readingContainer.appendChild(createBookCard(book, 'reading'));
+                        });
+                    } else {
+                        readingContainer.innerHTML = '<div class="empty-state"><p>No books here yet.</p></div>';
+                    }
+                    
+                    if (appState.userShelves.history?.length > 0) {
+                        appState.userShelves.history.forEach(book => {
+                            historyContainer.appendChild(createBookCard(book, 'small'));
+                        });
+                    } else {
+                        historyContainer.innerHTML = '<div class="empty-state"><p>You haven\'t finished any books yet.</p></div>';
+                    }
+                    
+                    if (appState.userShelves.wantToRead?.length > 0) {
+                        appState.userShelves.wantToRead.forEach(book => {
+                            wantToReadContainer.appendChild(createBookCard(book, 'small'));
+                        });
+                    } else {
+                        wantToReadContainer.innerHTML = '<div class="empty-state"><p>Your reading list is empty.</p></div>';
+                    }
+                } catch (error) {
+                    console.error('Error updating bookshelves:', error);
+                }
+            }
+
+            // Update the currently reading section on home page
+            function updateCurrentlyReadingSection() {
+                if (!appState.currentUser) return;
+                
+                const container = document.getElementById('currently-reading-container');
+                if (!container) return;
+                
+                const currentlyReadingBooks = appState.userShelves.reading || [];
+                
+                if (currentlyReadingBooks.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <p>You're not currently reading any books. Start reading to see them here!</p>
+                        </div>
+                    `;
+                } else {
+                    // Show only the first 6 books to avoid cluttering
+                    const booksToShow = currentlyReadingBooks.slice(0, 6);
+                    container.innerHTML = '';
+                    booksToShow.forEach(book => {
+                        container.appendChild(createBookCard(book, 'reading'));
+                    });
+                }
+            }
+
+            // Load recommended books for logged-in users
+            async function loadRecommendedBooks() {
+                if (!appState.currentUser) return;
+                
+                const container = document.getElementById('recommended-books-container');
+                if (!container) return;
+                
+                container.innerHTML = '<div class="loading col-span-full"><i class="fas fa-spinner fa-spin"></i> Loading recommendations...</div>';
+                
+                try {
+                    // Generate recommendations based on user's reading history and preferences
+                    let query = '';
+                    
+                    // If user has reading history, use those genres for recommendations
+                    if (appState.userShelves.history.length > 0) {
+                        // Extract genres from reading history (simplified approach)
+                        const historyGenres = ['fiction', 'fantasy', 'science', 'mystery'];
+                        const randomGenre = historyGenres[Math.floor(Math.random() * historyGenres.length)];
+                        query = `subject:${randomGenre}`;
+                    } else {
+                        // Default recommendations for new users
+                        query = 'bestselling books 2024';
+                    }
+                    
+                    const recommendedBooks = await fetchBooks(query, {}, 8);
+                    
+                    if (recommendedBooks.length > 0) {
+                        renderBooks('recommended-books-container', recommendedBooks);
+                    } else {
+                        container.innerHTML = `
+                            <div class="empty-state" style="grid-column: 1 / -1;">
+                                <p>We are still learning your preferences. Start reading and rating books to get personalized recommendations!</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Failed to load recommended books:', error);
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <p>Unable to load recommendations at the moment. Please try again later.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            async function updateProfileDashboard() {
+                if (!appState.currentUser) return;
+                try {
+                    const stats = await getBackendStats();
+                    document.getElementById('profile-avatar').textContent = appState.currentUser.name.charAt(0).toUpperCase();
+                    document.getElementById('profile-name').textContent = appState.currentUser.name;
+                    document.getElementById('profile-email').textContent = appState.currentUser.email;
+                    document.getElementById('stats-books-read').textContent = stats.total_books_read || appState.userShelves.history?.length || 0;
+                    document.getElementById('stats-pages-read').textContent = (stats.total_pages_read || 0).toLocaleString();
+                    document.getElementById('stats-genres').textContent = stats.unique_genres || 0;
+                    document.getElementById('stats-groups').textContent = appState.joinedGroups.size;
+                } catch (error) {
+                    console.error('Failed to update profile dashboard:', error);
+                    // Fallback to local data if backend fails
+                    document.getElementById('stats-books-read').textContent = appState.userShelves.history?.length || 0;
+                    document.getElementById('stats-groups').textContent = appState.joinedGroups.size;
+                }
+            }
+
+            // --- SEARCH & SUGGESTIONS ---
+            async function handleSearch() {
+                const query = searchInput.value.trim();
+                if (!query) {
+                    document.getElementById('search-results-container').innerHTML = '';
+                    return;
+                };
+
+                const container = document.getElementById('search-results-container');
+                container.innerHTML = '<div class="loading col-span-full"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
+
+                const searchParams = {
+                    orderBy: document.getElementById('sort-by').value,
+                    printType: document.getElementById('print-type').value,
+                    langRestrict: document.getElementById('language').value
+                };
+
+                const books = await fetchBooks(query, searchParams, 40);
+                renderBooks('search-results-container', books);
+            }
+            
+            async function fetchAndShowSuggestions() {
+                const query = searchInput.value.trim();
+                if (query.length < 3) { searchSuggestions.style.display = 'none'; return; }
+                const books = await fetchBooks(query, {}, 5);
+                searchSuggestions.innerHTML = '';
+                if (books.length > 0) {
+                    books.forEach(book => {
+                        const item = document.createElement('div');
+                        item.className = 'suggestion-item';
+                        item.textContent = book.volumeInfo.title;
+                        item.addEventListener('click', () => { 
+                            searchInput.value = book.volumeInfo.title; 
+                            handleSearch(); 
+                        });
+                        searchSuggestions.appendChild(item);
+                    });
+                    searchSuggestions.style.display = 'block';
+                } else {
+                    searchSuggestions.style.display = 'none';
+                }
+            }
+            
+            document.getElementById('search-button').addEventListener('click', handleSearch);
+            searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
+            searchInput.addEventListener('input', () => {
+                clearTimeout(appState.searchTimeout);
+                appState.searchTimeout = setTimeout(fetchAndShowSuggestions, 300);
+            });
+            
+            searchOptions.addEventListener('change', () => {
+                if (searchInput.value.trim()) {
+                    handleSearch();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-bar')) { 
+                    searchSuggestions.style.display = 'none'; 
+                }
+            });
+
+            // --- CATEGORIES & COMMUNITY ---
+            function renderCategories() {
+                const categories = [
+                    { name: 'Fantasy', icon: 'fa-dragon' }, 
+                    { name: 'Science Fiction', icon: 'fa-rocket' },
+                    { name: 'Mystery', icon: 'fa-search' }, 
+                    { name: 'Romance', icon: 'fa-heart' },
+                    { name: 'History', icon: 'fa-monument' }, 
+                    { name: 'Technology', icon: 'fa-laptop-code' },
+                    { name: 'Biography', icon: 'fa-user-tie' }, 
+                    { name: 'Cooking', icon: 'fa-utensils' },
+                ];
+                const grid = document.querySelector('#categories .categories-grid');
+                grid.innerHTML = categories.map(cat => `
+                    <div class="category-card" data-category="${cat.name}">
+                        <div class="category-icon"><i class="fas ${cat.icon}"></i></div>
+                        <h3>${cat.name}</h3>
+                    </div>`).join('');
+                
+                grid.querySelectorAll('.category-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        switchTab('browse');
+                        searchInput.value = `subject:"${card.dataset.category}"`;
+                        handleSearch();
+                    });
+                });
+            }
+            
+            function renderCommunityGroups() {
+                const groups = [
+                    { _id: 'scifi', name: 'Sci-Fi Enthusiasts', memberCount: 2341, icon: 'fa-rocket' },
+                    { _id: 'mystery', name: 'Mystery Book Club', memberCount: 1897, icon: 'fa-search' },
+                    { _id: 'fantasy', name: 'Fantasy Readers', memberCount: 1542, icon: 'fa-dragon' },
+                ];
+                const container = document.querySelector('.groups-container');
+                container.innerHTML = '';
+                groups.forEach(group => {
+                    const isJoined = appState.joinedGroups.has(group._id);
+                    const card = document.createElement('div');
+                    card.className = 'group-card';
+                    card.innerHTML = `
+                        <div class="group-icon"><i class="fas ${group.icon}"></i></div>
+                        <div class="group-info">
+                            <h3>${group.name}</h3>
+                            <p>${group.memberCount.toLocaleString()} members</p>
+                        </div>
+                        <button class="btn ${isJoined ? '' : 'btn-primary'} join-group-btn" data-group-id="${group._id}">
+                            ${isJoined ? 'Joined' : 'Join'}
+                        </button>
+                    `;
+                    container.appendChild(card);
+                });
+                
+                container.querySelectorAll('.join-group-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (!appState.currentUser) { 
+                            openModal('auth'); 
+                            return; 
+                        }
+                        
+                        const groupId = btn.dataset.groupId;
+                        if (appState.joinedGroups.has(groupId)) {
+                            appState.joinedGroups.delete(groupId);
+                            btn.textContent = 'Join';
+                            btn.classList.add('btn-primary');
+                            showNotification('Left group successfully', 'info');
+                        } else {
+                            appState.joinedGroups.add(groupId);
+                            btn.textContent = 'Joined';
+                            btn.classList.remove('btn-primary');
+                            showNotification('Joined group successfully!', 'success');
+                        }
+                        
+                        // Save groups to localStorage
+                        if (appState.currentUser) {
+                            localStorage.setItem(`bookifyme_joinedGroups_${appState.currentUser.email}`, JSON.stringify([...appState.joinedGroups]));
+                        }
+                        
+                        updateProfileDashboard();
+                    });
+                });
+            }
+
+            // --- INITIALIZATION ---
+            async function init() {
+                const storedUser = localStorage.getItem('currentUser');
+                const storedToken = localStorage.getItem('authToken');
+                
+                if (storedUser && storedToken) {
+                    try {
+                        appState.currentUser = JSON.parse(storedUser);
+                        appState.authToken = storedToken;
+                        // Test backend connection
+                        await backendRequest('/auth/me');
+                        
+                        // Load joined groups from localStorage
+                        const storedGroups = localStorage.getItem(`bookifyme_joinedGroups_${appState.currentUser.email}`);
+                        if (storedGroups) {
+                            appState.joinedGroups = new Set(JSON.parse(storedGroups));
+                        }
+                        
+                        await loadUserData();
+                        console.log('✅ User session restored:', appState.currentUser.name);
+                    } catch (error) {
+                        console.error('Failed to restore user session:', error);
+                        // Even if backend fails, try to load from localStorage
+                        if (storedUser) {
+                            appState.currentUser = JSON.parse(storedUser);
+                            loadUserShelvesFromStorage();
+                            updateUIForAuth();
+                        }
+                    }
+                }
+                
+                setupAuthModal();
+                updateUIForAuth();
+                renderCategories();
+                renderCommunityGroups();
+
+                const initialTab = window.location.hash.substring(1) || 'home';
+                showTab(initialTab);
+
+                try {
+                    const trendingBooks = await fetchBooks('bestselling fiction 2024', {}, 12);
+                    renderBooks('trending-books-container', trendingBooks);
+                    const newReleases = await fetchBooks('new release books', { orderBy: 'newest'}, 12);
+                    renderBooks('new-releases-container', newReleases);
+                } catch (error) {
+                    console.error('Failed to load initial books:', error);
+                }
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
