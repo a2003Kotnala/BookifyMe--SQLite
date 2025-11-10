@@ -550,6 +550,59 @@
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
+
+        /* Forgot Password Link */
+        .forgot-password-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .forgot-password-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Info Pages */
+        .info-page {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin: 30px 0;
+        }
+        
+        .info-page h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .info-page h3 {
+            color: var(--dark);
+            margin: 25px 0 15px;
+            font-size: 1.4rem;
+        }
+        
+        .info-page p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+        
+        .info-page ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .info-page li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -732,16 +785,119 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Info Pages -->
+            <div id="faq" class="tab-content">
+                <div class="info-page">
+                    <h2>Frequently Asked Questions</h2>
+                    
+                    <h3>Getting Started</h3>
+                    <p><strong>How do I create an account?</strong><br>
+                    Click on "Login / Sign Up" in the top right corner, then select the "Register" tab to create your account.</p>
+                    
+                    <p><strong>Is BookifyMe free to use?</strong><br>
+                    Yes! BookifyMe is completely free for all users.</p>
+                    
+                    <h3>Managing Your Books</h3>
+                    <p><strong>How do I add books to my shelf?</strong><br>
+                    Click the "+" button on any book card and choose which shelf to add it to: Currently Reading, Want to Read, or Finished.</p>
+                    
+                    <p><strong>Can I move books between shelves?</strong><br>
+                    Yes! You can move books between shelves at any time by using the "+" button again.</p>
+                    
+                    <p><strong>How do I mark a book as read?</strong><br>
+                    Books in your "Currently Reading" shelf will have a "Mark as Read" button that moves them to your Finished shelf.</p>
+                    
+                    <h3>Community Features</h3>
+                    <p><strong>How do I join reading groups?</strong><br>
+                    Visit the Community tab to browse available groups and click "Join" on any group that interests you.</p>
+                    
+                    <p><strong>Can I create my own reading group?</strong><br>
+                    This feature is coming soon! Stay tuned for updates.</p>
+                </div>
+            </div>
+
+            <div id="contact" class="tab-content">
+                <div class="info-page">
+                    <h2>Contact Us</h2>
+                    
+                    <h3>Get in Touch</h3>
+                    <p>We'd love to hear from you! Whether you have questions, feedback, or need support, our team is here to help.</p>
+                    
+                    <h3>Support Channels</h3>
+                    <p><strong>Email Support:</strong><br>
+                    support@bookifyme.com</p>
+                    
+                    <p><strong>Response Time:</strong><br>
+                    We typically respond within 24-48 hours.</p>
+                    
+                    <h3>Follow Us</h3>
+                    <p>Stay connected with BookifyMe:</p>
+                    <ul>
+                        <li>Twitter: @BookifyMeApp</li>
+                        <li>Instagram: @BookifyMe</li>
+                        <li>Facebook: /BookifyMe</li>
+                    </ul>
+                    
+                    <h3>Bug Reports & Feature Requests</h3>
+                    <p>Found a bug or have an idea for improving BookifyMe? Email us at feedback@bookifyme.com with details about your suggestion or the issue you encountered.</p>
+                </div>
+            </div>
+
+            <div id="privacy" class="tab-content">
+                <div class="info-page">
+                    <h2>Privacy Policy</h2>
+                    
+                    <h3>Information We Collect</h3>
+                    <p><strong>Account Information:</strong> When you create an account, we collect your name and email address.</p>
+                    <p><strong>Reading Data:</strong> We store information about books you add to your shelves and your reading preferences.</p>
+                    <p><strong>Usage Data:</strong> We collect anonymous data about how you use BookifyMe to improve our service.</p>
+                    
+                    <h3>How We Use Your Information</h3>
+                    <ul>
+                        <li>To provide and personalize your BookifyMe experience</li>
+                        <li>To recommend books based on your reading history</li>
+                        <li>To improve our services and develop new features</li>
+                        <li>To communicate with you about your account</li>
+                    </ul>
+                    
+                    <h3>Data Security</h3>
+                    <p>We implement appropriate security measures to protect your personal information. Your password is encrypted and never stored in plain text.</p>
+                    
+                    <h3>Your Rights</h3>
+                    <p>You can access, update, or delete your personal information at any time through your account settings. You may also export your reading data.</p>
+                    
+                    <h3>Contact</h3>
+                    <p>If you have any questions about our privacy practices, please contact us at privacy@bookifyme.com.</p>
+                    
+                    <p><em>Last updated: January 2025</em></p>
+                </div>
+            </div>
         </main>
         
         <footer>
             <div class="container">
                 <div class="footer-content">
-                    <div class="footer-section"><h3>About BookifyMe</h3><p>Discover your next favorite book with intelligent recommendations.</p></div>
-                    <div class="footer-section"><h3>Quick Links</h3><a href="#home">Home</a><a href="#browse">Browse</a><a href="#community">Community</a></div>
-                    <div class="footer-section"><h3>Help & Support</h3><a href="#">FAQ</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a></div>
+                    <div class="footer-section">
+                        <h3>About BookifyMe</h3>
+                        <p>Discover your next favorite book with intelligent recommendations. Track your reading journey and connect with fellow book lovers.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <a href="#home" class="footer-link" data-tab="home">Home</a>
+                        <a href="#browse" class="footer-link" data-tab="browse">Browse</a>
+                        <a href="#community" class="footer-link" data-tab="community">Community</a>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Help & Support</h3>
+                        <a href="#faq" class="footer-link" data-tab="faq">FAQ</a>
+                        <a href="#contact" class="footer-link" data-tab="contact">Contact Us</a>
+                        <a href="#privacy" class="footer-link" data-tab="privacy">Privacy Policy</a>
+                    </div>
                 </div>
-                <div class="footer-bottom"><p>&copy; 2025 BookifyMe. All rights reserved.</p></div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 BookifyMe. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--accent);"></i> for book lovers everywhere.</p>
+                </div>
             </div>
         </footer>
     </div>
@@ -761,16 +917,72 @@
                 <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" required></div>
                 <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" required></div>
                 <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+                <div class="forgot-password-link">
+                    <a href="#" id="forgot-password-link">Forgot your password?</a>
+                </div>
             </form>
             <form id="register-form" class="auth-form">
                 <div class="form-group"><label for="register-name">Name</label><input type="text" id="register-name" required></div>
                 <div class="form-group"><label for="register-email">Email</label><input type="email" id="register-email" required></div>
-                <div class="form-group"><label for="register-password">Password</label><input type="password" id="register-password" required></div>
+                <div class="form-group"><label for="register-password">Password</label><input type="password" id="register-password" required placeholder="Min. 8 characters with uppercase, lowercase, and digit"></div>
                 <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
             </form>
         </div>
     </div>
-    <div id="shelf-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Add to Shelf</h2><button class="close-modal">&times;</button></div><div id="shelf-options" class="flex flex-col gap-4"></div></div></div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Your Password</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="forgot-email">Email Address</label>
+                    <input type="email" id="forgot-email" required placeholder="Enter your email address">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Send Reset Link</button>
+            </form>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" id="back-to-login" style="color: var(--primary); text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i> Back to Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="reset-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Password</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="reset-password-form">
+                <input type="hidden" id="reset-token">
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" required placeholder="Min. 8 characters with uppercase, lowercase, and digit">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" required placeholder="Confirm your new password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="shelf-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add to Shelf</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="shelf-options" class="flex flex-col gap-4"></div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -795,6 +1007,7 @@
             const searchOptions = document.querySelector('.search-options');
             const currentlyReadingSection = document.getElementById('currently-reading-section');
             const recommendedBooksSection = document.getElementById('recommended-books-section');
+            const footerLinks = document.querySelectorAll('.footer-link');
             
             // --- APP STATE ---
             let appState = {
@@ -803,11 +1016,10 @@
                 joinedGroups: new Set(),
                 searchTimeout: null,
                 currentSearchQuery: '',
-                authToken: localStorage.getItem('authToken'),
-                backendAvailable: true // Track backend status
+                authToken: localStorage.getItem('authToken')
             };
 
-            // --- BACKEND API FUNCTIONS WITH FALLBACKS ---
+            // --- BACKEND API FUNCTIONS ---
             async function backendRequest(endpoint, options = {}) {
                 const url = `${BACKEND_BASE_URL}${endpoint}`;
                 const config = {
@@ -822,19 +1034,24 @@
                 }
                 
                 try {
+                    console.log(`Making request to: ${url}`, config);
                     const response = await fetch(url, config);
                     
                     if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred' }));
+                        const errorText = await response.text();
+                        let errorData;
+                        try {
+                            errorData = JSON.parse(errorText);
+                        } catch {
+                            errorData = { message: errorText || `HTTP error! status: ${response.status}` };
+                        }
                         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
                     }
                     
                     const data = await response.json();
-                    appState.backendAvailable = true;
                     return data;
                 } catch (error) {
                     console.error('Backend request failed:', error);
-                    appState.backendAvailable = false;
                     throw error;
                 }
             }
@@ -853,14 +1070,58 @@
                 });
             }
 
+            async function backendForgotPassword(email) {
+                return backendRequest('/auth/forgot-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ email })
+                });
+            }
+
+            async function backendResetPassword(token, newPassword) {
+                return backendRequest('/auth/reset-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        token: token,
+                        new_password: newPassword 
+                    })
+                });
+            }
+
+            // --- PASSWORD VALIDATION (Updated to match backend) ---
+            function validatePasswordFrontend(password) {
+                if (password.length < 8) {
+                    return { isValid: false, message: 'Password must be at least 8 characters long' };
+                }
+                
+                if (!/[A-Z]/.test(password)) {
+                    return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+                }
+                
+                if (!/[a-z]/.test(password)) {
+                    return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+                }
+                
+                if (!/\d/.test(password)) {
+                    return { isValid: false, message: 'Password must contain at least one digit' };
+                }
+                
+                return { isValid: true, message: 'Password is valid' };
+            }
+
             async function getBackendBookshelf() {
                 try {
                     const data = await backendRequest('/bookshelf');
                     console.log('Backend bookshelf data:', data);
-                    return data.data.bookshelves || { reading: [], wantToRead: [], finished: [] };
+                    // Transform the data to match frontend expectations
+                    const shelves = data.data.bookshelves || { reading: [], wantToRead: [], finished: [] };
+                    return {
+                        reading: shelves.reading || [],
+                        wantToRead: shelves.wantToRead || [],
+                        finished: shelves.finished || []
+                    };
                 } catch (error) {
-                    console.error('Failed to get bookshelf from backend, using local storage:', error);
-                    return null; // Return null to indicate backend failure
+                    console.error('Failed to get bookshelf:', error);
+                    return { reading: [], wantToRead: [], finished: [] };
                 }
             }
 
@@ -877,11 +1138,14 @@
 
                     // Prepare book data for backend
                     const bookPayload = {
-                        google_books_id: bookId,
                         title: volumeInfo.title || 'Unknown Title',
                         authors: volumeInfo.authors || ['Unknown Author'],
-                        thumbnail: volumeInfo.thumbnail || volumeInfo.imageLinks?.thumbnail,
-                        page_count: volumeInfo.pageCount || 0
+                        thumbnail: volumeInfo.imageLinks?.thumbnail || volumeInfo.thumbnail,
+                        page_count: volumeInfo.pageCount || 0,
+                        description: volumeInfo.description || '',
+                        average_rating: volumeInfo.averageRating || 0,
+                        preview_link: volumeInfo.previewLink || '',
+                        info_link: volumeInfo.infoLink || ''
                     };
 
                     const response = await backendRequest('/bookshelf/add', {
@@ -919,7 +1183,7 @@
                 }
             }
 
-            // IMPROVED: Move book between shelves in backend with better error handling
+            // Move book between shelves in backend
             async function moveBookInBackend(book, fromShelf, toShelf) {
                 try {
                     const bookData = book.book || book;
@@ -930,21 +1194,17 @@
                         throw new Error('Book ID not found');
                     }
 
-                    // Try to remove from old shelf (ignore if it fails - book might not exist there)
-                    try {
-                        await removeFromBackendShelf(bookId, fromShelf);
-                        console.log(`Removed book from ${fromShelf} shelf in backend`);
-                    } catch (removeError) {
-                        console.warn(`Could not remove book from ${fromShelf} shelf:`, removeError.message);
-                        // Continue anyway - the book might not exist in that shelf
-                    }
-
-                    // Add to new shelf
-                    await addToBackendShelf(book, toShelf);
-                    console.log(`Added book to ${toShelf} shelf in backend`);
+                    // Use the move endpoint
+                    const response = await backendRequest('/bookshelf/move', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            book_id: bookId,
+                            to_shelf: toShelf
+                        })
+                    });
                     
                     console.log(`Book moved from ${fromShelf} to ${toShelf} in backend`);
-                    return true;
+                    return response;
                 } catch (error) {
                     console.error('Error moving book in backend:', error);
                     throw error;
@@ -954,9 +1214,10 @@
             async function getBackendStats() {
                 try {
                     const data = await backendRequest('/bookshelf/stats');
+                    console.log('Backend stats:', data);
                     return data.data.stats || {};
                 } catch (error) {
-                    console.error('Failed to get stats from backend:', error);
+                    console.error('Failed to get stats:', error);
                     return {};
                 }
             }
@@ -1005,7 +1266,7 @@
 
             // --- UI RENDERING ---
             function createBookCard(book, cardType = 'standard') {
-                // Ensure we have the proper book data structure
+                // Handle both backend format (book.book) and Google Books format
                 const bookData = book.book || book;
                 const volumeInfo = bookData.volumeInfo || bookData;
                 const title = volumeInfo.title || 'No Title';
@@ -1025,7 +1286,7 @@
                     imageUrl = imageUrl.replace(/zoom=[0-9]/, 'zoom=0');
                 }
 
-                const readLink = bookData.accessInfo?.webReaderLink || book.accessInfo?.webReaderLink || volumeInfo.preview_link;
+                const readLink = bookData.accessInfo?.webReaderLink || book.accessInfo?.webReaderLink || volumeInfo.preview_link || volumeInfo.previewLink;
                 const card = document.createElement('div');
                 card.className = (cardType === 'small' || cardType === 'reading') ? 'book-card small-book-card' : 'book-card';
                 
@@ -1051,6 +1312,7 @@
                 `;
                 
                 card.querySelector('.add-to-shelf-btn')?.addEventListener('click', e => { 
+                    e.preventDefault();
                     e.stopPropagation(); 
                     if (!appState.currentUser) { 
                         openModal('auth'); 
@@ -1065,12 +1327,13 @@
                         openModal('auth'); 
                         return; 
                     } 
-                    addBookToShelf(book, 'reading'); 
+                    // Don't prevent default - let the link work normally
                 });
                 
                 const markAsReadBtn = card.querySelector('.mark-as-read-btn');
                 if (markAsReadBtn) {
                     markAsReadBtn.addEventListener('click', async e => { 
+                        e.preventDefault();
                         e.stopPropagation(); 
                         
                         // Add immediate visual feedback
@@ -1154,6 +1417,17 @@
                 });
             });
 
+            // Footer links navigation
+            footerLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabName = link.getAttribute('data-tab');
+                    if (tabName) {
+                        switchTab(tabName);
+                    }
+                });
+            });
+
             document.getElementById('explore-now-btn').addEventListener('click', (e) => {
                 e.preventDefault();
                 switchTab('browse');
@@ -1213,6 +1487,8 @@
                     recommendedBooksSection.style.display = 'block';
                     updateCurrentlyReadingSection();
                     loadRecommendedBooks();
+                    // Re-render community groups to show correct join status
+                    renderCommunityGroups();
                 } else {
                     actionsContainer.innerHTML = `<button id="auth-btn">Login / Sign Up</button>`;
                     actionsContainer.querySelector('#auth-btn').addEventListener('click', () => openModal('auth'));
@@ -1241,8 +1517,14 @@
                 showNotification('You have been logged out.', 'info');
             }
 
+            // --- AUTHENTICATION HANDLERS (Updated) ---
             async function handleLogin(email, password) {
                 try {
+                    const submitBtn = document.querySelector('#login-form button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+                    submitBtn.disabled = true;
+
                     const response = await backendLogin({ email, password });
                     appState.currentUser = response.data.user;
                     appState.authToken = response.data.token;
@@ -1259,17 +1541,33 @@
                     updateUIForAuth();
                     closeModals();
                     showNotification('Welcome back! Successfully logged in.', 'success');
+                    
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                 } catch (error) {
+                    console.error('Login error:', error);
                     showNotification('Login failed: ' + error.message, 'error');
+                    
+                    const submitBtn = document.querySelector('#login-form button[type="submit"]');
+                    submitBtn.innerHTML = 'Sign In';
+                    submitBtn.disabled = false;
                 }
             }
 
             async function handleRegister(name, email, password) {
-                if (password.length < 6) {
-                    showNotification('Password must be at least 6 characters long', 'error');
+                // Use the same validation as backend
+                const passwordValidation = validatePasswordFrontend(password);
+                if (!passwordValidation.isValid) {
+                    showNotification(passwordValidation.message, 'error');
                     return;
                 }
+                
                 try {
+                    const submitBtn = document.querySelector('#register-form button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                    submitBtn.disabled = true;
+
                     const response = await backendRegister({ name, email, password });
                     appState.currentUser = response.data.user;
                     appState.authToken = response.data.token;
@@ -1284,8 +1582,83 @@
                     updateUIForAuth();
                     closeModals();
                     showNotification('Account created successfully! Welcome to BookifyMe.', 'success');
+                    
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                 } catch (error) {
+                    console.error('Registration error:', error);
                     showNotification('Registration failed: ' + error.message, 'error');
+                    
+                    const submitBtn = document.querySelector('#register-form button[type="submit"]');
+                    submitBtn.innerHTML = 'Create Account';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            // Forgot Password Handling
+            async function handleForgotPassword(email) {
+                try {
+                    const submitBtn = document.querySelector('#forgot-password-form button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    submitBtn.disabled = true;
+
+                    await backendForgotPassword(email);
+                    showNotification('If the email exists, a password reset link has been sent. Check your console for the reset link (in development).', 'success');
+                    closeModals();
+                    document.getElementById('forgot-email').value = '';
+                    
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                } catch (error) {
+                    console.error('Forgot password error:', error);
+                    showNotification('Failed to send reset link: ' + error.message, 'error');
+                    
+                    const submitBtn = document.querySelector('#forgot-password-form button[type="submit"]');
+                    submitBtn.innerHTML = 'Send Reset Link';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            // Reset Password Handling
+            async function handleResetPassword(token, newPassword, confirmPassword) {
+                // Use the same validation as backend
+                const passwordValidation = validatePasswordFrontend(newPassword);
+                if (!passwordValidation.isValid) {
+                    showNotification(passwordValidation.message, 'error');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    showNotification('Passwords do not match', 'error');
+                    return;
+                }
+                
+                try {
+                    const submitBtn = document.querySelector('#reset-password-form button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resetting...';
+                    submitBtn.disabled = true;
+
+                    await backendResetPassword(token, newPassword);
+                    showNotification('Password reset successfully! You can now login with your new password.', 'success');
+                    closeModals();
+                    // Clear form
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                    document.getElementById('reset-token').value = '';
+                    // Show login modal
+                    openModal('auth');
+                    
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                } catch (error) {
+                    console.error('Reset password error:', error);
+                    showNotification('Failed to reset password: ' + error.message, 'error');
+                    
+                    const submitBtn = document.querySelector('#reset-password-form button[type="submit"]');
+                    submitBtn.innerHTML = 'Reset Password';
+                    submitBtn.disabled = false;
                 }
             }
 
@@ -1306,6 +1679,34 @@
                 );
             });
 
+            document.getElementById('forgot-password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleForgotPassword(document.getElementById('forgot-email').value);
+            });
+
+            document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleResetPassword(
+                    document.getElementById('reset-token').value,
+                    document.getElementById('new-password').value,
+                    document.getElementById('confirm-password').value
+                );
+            });
+
+            // Forgot password link
+            document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModals();
+                openModal('forgot-password');
+            });
+
+            // Back to login link
+            document.getElementById('back-to-login').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModals();
+                openModal('auth');
+            });
+
             // --- BOOKSHELF & PROFILE ---
             function openShelfModal(book) {
                 const shelfOptions = document.getElementById('shelf-options');
@@ -1315,7 +1716,8 @@
                     <button class="btn btn-primary add-to-shelf-option" data-shelf="finished">Add to History</button>
                 `;
                 shelfOptions.querySelectorAll('.add-to-shelf-option').forEach(btn => {
-                    btn.addEventListener('click', () => { 
+                    btn.addEventListener('click', (e) => { 
+                        e.preventDefault();
                         addBookToShelf(book, btn.dataset.shelf); 
                         closeModals(); 
                     });
@@ -1370,13 +1772,11 @@
                     // Update currently reading section on home page
                     updateCurrentlyReadingSection();
                     
-                    // Try to update backend, but don't fail if backend is unavailable
-                    try {
-                        await addToBackendShelf(bookDataForApi, backendShelf);
-                    } catch (backendError) {
-                        console.warn('Backend update failed, but local state was saved:', backendError);
-                        // Don't show error to user for backend failures in add
-                    }
+                    // Update backend
+                    await addToBackendShelf(bookDataForApi, backendShelf);
+                    
+                    // Update profile stats immediately
+                    await updateProfileDashboard();
                     
                     const shelfNames = {
                         'reading': 'Currently Reading', 'wantToRead': 'Want to Read',
@@ -1393,7 +1793,7 @@
                 }
             }
 
-            // COMPLETELY FIXED: markBookAsRead function with robust backend handling
+            // FIXED: markBookAsRead function that properly updates backend
             async function markBookAsRead(book) {
                 try {
                     console.log('Marking book as read:', book);
@@ -1409,7 +1809,16 @@
                     // Save original state for potential rollback
                     const originalShelves = JSON.parse(JSON.stringify(appState.userShelves));
 
-                    // FIRST: Update local state immediately for better UX
+                    // FIRST: Update the backend - move from 'reading' to 'finished'
+                    try {
+                        await moveBookInBackend(book, 'reading', 'finished');
+                        console.log('Backend successfully moved book from reading to finished');
+                    } catch (backendError) {
+                        console.error('Backend update failed:', backendError);
+                        throw new Error('Failed to update reading progress in database');
+                    }
+
+                    // THEN: Update local state only after backend success
                     // Remove from reading shelf in local state
                     const originalReadingLength = appState.userShelves.reading.length;
                     appState.userShelves.reading = appState.userShelves.reading.filter(
@@ -1441,25 +1850,17 @@
                         console.log('Added to history. History length:', appState.userShelves.history.length);
                     }
 
-                    // Save to localStorage immediately
+                    // Save to localStorage
                     saveUserShelvesToStorage();
 
-                    // Update UI immediately for better UX
+                    // Update UI
                     updateBookshelves();
                     updateCurrentlyReadingSection();
                     
-                    // Show immediate feedback
+                    // Update profile stats immediately
+                    await updateProfileDashboard();
+                    
                     showNotification('Book marked as read!', 'success');
-
-                    // THEN: Try to update backend in the background
-                    try {
-                        await moveBookInBackend(book, 'reading', 'finished');
-                        console.log('Backend successfully updated');
-                    } catch (backendError) {
-                        console.warn('Backend update failed, but local state was saved:', backendError);
-                        // Don't show error to user for backend failures - local state is preserved
-                        // The data will sync when backend comes back online
-                    }
 
                 } catch (error) {
                     console.error('Error marking book as read:', error);
@@ -1489,16 +1890,17 @@
                 return false;
             }
 
-            // IMPROVED: loadUserData with better backend fallback
+            // FIXED: loadUserData that properly syncs with backend
             async function loadUserData() {
                 if (!appState.currentUser) return;
                 
                 try {
                     // First try to load from backend to get the source of truth
                     const bookshelfData = await getBackendBookshelf();
+                    console.log('Backend bookshelf data received:', bookshelfData);
                     
-                    if (bookshelfData) {
-                        // Backend returned valid data - use it as source of truth
+                    // If backend has data, use it (this is the source of truth)
+                    if (bookshelfData && (bookshelfData.reading?.length > 0 || bookshelfData.finished?.length > 0 || bookshelfData.wantToRead?.length > 0)) {
                         appState.userShelves = {
                             reading: bookshelfData.reading || [],
                             wantToRead: bookshelfData.wantToRead || [],
@@ -1506,13 +1908,12 @@
                         };
                         console.log('Using backend data as source of truth');
                     } else {
-                        // Backend failed or returned null - use localStorage
+                        // If no backend data, try to load from localStorage
                         const hasLocalData = loadUserShelvesFromStorage();
                         if (!hasLocalData) {
                             // If no local data either, initialize empty
                             appState.userShelves = { reading: [], wantToRead: [], history: [] };
                         }
-                        console.log('Using localStorage data (backend unavailable)');
                     }
                     
                     // Save the final state to localStorage
@@ -1527,8 +1928,8 @@
                     
                     console.log('Final user shelves state:', appState.userShelves);
                 } catch (error) {
-                    console.error('Failed to load user data:', error);
-                    // If everything fails, fall back to localStorage
+                    console.error('Failed to load user data from backend:', error);
+                    // If backend fails, fall back to localStorage
                     if (!loadUserShelvesFromStorage()) {
                         appState.userShelves = { reading: [], wantToRead: [], history: [] };
                     }
@@ -1716,7 +2117,10 @@
                 }
             }
             
-            document.getElementById('search-button').addEventListener('click', handleSearch);
+            document.getElementById('search-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                handleSearch();
+            });
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
             searchInput.addEventListener('input', () => {
                 clearTimeout(appState.searchTimeout);
@@ -1789,7 +2193,8 @@
                 });
                 
                 container.querySelectorAll('.join-group-btn').forEach(btn => {
-                    btn.addEventListener('click', async () => {
+                    btn.addEventListener('click', async (e) => {
+                        e.preventDefault();
                         if (!appState.currentUser) { 
                             openModal('auth'); 
                             return; 
@@ -1827,7 +2232,6 @@
                     try {
                         appState.currentUser = JSON.parse(storedUser);
                         appState.authToken = storedToken;
-                        // Test backend connection
                         await backendRequest('/auth/me');
                         
                         // Load joined groups from localStorage
@@ -1840,12 +2244,10 @@
                         console.log('✅ User session restored:', appState.currentUser.name);
                     } catch (error) {
                         console.error('Failed to restore user session:', error);
-                        // Even if backend fails, try to load from localStorage
-                        if (storedUser) {
-                            appState.currentUser = JSON.parse(storedUser);
-                            loadUserShelvesFromStorage();
-                            updateUIForAuth();
-                        }
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('authToken');
+                        appState.currentUser = null;
+                        appState.authToken = null;
                     }
                 }
                 
@@ -1853,6 +2255,16 @@
                 updateUIForAuth();
                 renderCategories();
                 renderCommunityGroups();
+
+                // Check for reset password token in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const resetToken = urlParams.get('token');
+                if (resetToken && window.location.hash === '#reset-password') {
+                    document.getElementById('reset-token').value = resetToken;
+                    openModal('reset-password');
+                    // Clean URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
 
                 const initialTab = window.location.hash.substring(1) || 'home';
                 showTab(initialTab);

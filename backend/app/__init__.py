@@ -1,12 +1,10 @@
-# app/__init__.py
-
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from werkzeug.exceptions import HTTPException # Import for handling HTTP errors
+from werkzeug.exceptions import HTTPException
 
 from config import Config
 
@@ -29,14 +27,30 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    # Your specific origin setup is good practice for security!
-    cors.init_app(app, origins=[app.config.get('FRONTEND_URL', 'http://localhost:3000')])
+    
+    # CORS configuration - allow all origins for development
+    cors.init_app(app, resources={
+        r"/api/*": {
+            "origins": [
+                "http://127.0.0.1:5500",
+                "http://localhost:5500", 
+                "http://127.0.0.1:5000",
+                "http://localhost:5000"
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     
     # Initialize services
     from app.services.google_books import google_books_service
     google_books_service.init_app(app)
     
-    # --- Register Blueprints ---
+    # Initialize email service
+    from app.services.email_service import email_service
+    email_service.init_app(app)
+    
+    # Register Blueprints
     from app.routes.auth import auth_bp
     from app.routes.books import books_bp
     from app.routes.bookshelf import bookshelf_bp
@@ -47,37 +61,41 @@ def create_app(config_class=Config):
     app.register_blueprint(bookshelf_bp, url_prefix='/api/bookshelf')
     app.register_blueprint(community_bp, url_prefix='/api/community')
     
-    # --- Register API Routes ---
+    # Register API Routes
     @app.route('/')
     def hello():
         return jsonify({
             "message": "📚 Welcome to BookifyMe API!",
             "version": "1.0",
-            "status": "Server is running 🚀"
+            "status": "Server is running 🚀",
+            "database": app.config['SQLALCHEMY_DATABASE_URI']
         })
     
     @app.route('/health')
     def health():
         return jsonify({"status": "healthy"})
 
-    # --- Add custom JSON Error Handling ---
+    # Custom JSON Error Handling
     @app.errorhandler(HTTPException)
     def handle_http_exception(e):
         """Return JSON instead of HTML for HTTP errors."""
-        response = e.get_response()
-        response.data = jsonify({
+        return jsonify({
             "code": e.code,
             "name": e.name,
             "description": e.description,
-        }).data
-        response.content_type = "application/json"
-        return response
+        }), e.code
 
-    # --- Add a developer-friendly shell context ---
-    # This makes 'db' and your models automatically available in `flask shell`
+    @app.errorhandler(500)
+    def handle_500_error(e):
+        return jsonify({
+            "code": 500,
+            "name": "Internal Server Error",
+            "description": "An internal server error occurred"
+        }), 500
+
+    # Shell context for Flask CLI
     @app.shell_context_processor
     def make_shell_context():
-        # Make sure to import your models here
         from app.models import User, Book 
         return {'db': db, 'User': User, 'Book': Book}
 
